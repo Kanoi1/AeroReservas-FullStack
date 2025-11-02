@@ -1,0 +1,9 @@
+# Directorio de dependencias
+/node_modules
+
+# Archivo de entorno (¡NUNCA SUBAS TUS CONTRASEÑAS!)
+.env
+
+# Archivos de logs
+*.log
+npm-debug.log*

@@ -1,0 +1,261 @@
+openapi: 3.0.0
+info:
+  title: AeroReservas API
+  description: API para la gestión de reservas de asientos de avión.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api
+    description: Servidor de desarrollo local
+
+components:
+  securitySchemes:
+    # Define el método de seguridad: un token en el header
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      in: header
+      name: x-auth-token
+      description: "Token de autenticación JWT. Ingresar el token."
+
+# Define la seguridad global (todas las rutas la requieren)
+security:
+  - bearerAuth: []
+
+paths:
+  # --- Auth ---
+  /auth/register:
+    post:
+      summary: Registra un nuevo usuario
+      tags: [Auth]
+      security: [] # Esta ruta NO requiere autenticación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthInput'
+      responses:
+        '201':
+          description: Usuario creado exitosamente.
+        '400':
+          description: Datos inválidos (email ya existe, formato incorrecto).
+  
+  /auth/login:
+    post:
+      summary: Inicia sesión de un usuario
+      tags: [Auth]
+      security: [] # Esta ruta NO requiere autenticación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthInput'
+      responses:
+        '200':
+          description: Login exitoso. Devuelve un token JWT.
+        '400':
+          description: Credenciales incorrectas.
+
+  /auth/me:
+    get:
+      summary: Obtiene los datos del usuario autenticado
+      tags: [Auth]
+      responses:
+        '200':
+          description: Datos del usuario (incluyendo estado VIP).
+        '401':
+          description: No autorizado (token no válido o no proporcionado).
+
+  # --- Seats ---
+  /seats:
+    get:
+      summary: Obtiene el mapa completo de asientos
+      tags: [Seats]
+      responses:
+        '200':
+          description: Una lista de todos los asientos y su estado (ocupado/libre).
+        '401':
+          description: No autorizado.
+
+  # --- Reservations ---
+  /reservations:
+    post:
+      summary: Crea una nueva reserva (individual)
+      tags: [Reservations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewReservation'
+      responses:
+        '201':
+          description: Reserva creada exitosamente.
+        '400':
+          description: Datos inválidos (CUI, asiento ocupado, etc.).
+
+  /reservations/my-reservations:
+    get:
+      summary: Obtiene la lista de reservas del usuario actual
+      tags: [Reservations]
+      responses:
+        '200':
+          description: Una lista de las reservas del usuario.
+  
+  /reservations/cancel:
+    put:
+      summary: Cancela una reserva existente
+      tags: [Reservations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelInput'
+      responses:
+        '200':
+          description: Reserva cancelada.
+        '404':
+          description: No se encontró la reserva.
+          
+  /reservations/modify:
+    put:
+      summary: Modifica una reserva existente
+      tags: [Reservations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyInput'
+      responses:
+        '200':
+          description: Reserva modificada (devuelve nuevo precio).
+        '400':
+          description: Regla de negocio fallida (asiento ocupado, clase incorrecta).
+        '404':
+          description: No se encontró la reserva.
+          
+  /reservations/quote:
+    post:
+      summary: Cotiza el precio de un asiento (con descuento VIP)
+      tags: [Reservations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                seat_id:
+                  type: integer
+      responses:
+        '200':
+          description: Devuelve el precio original, descuento y precio final.
+          
+  /reservations/send-summary-email:
+    post:
+      summary: Envía el correo de resumen para múltiples reservas
+      tags: [Reservations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reservations:
+                  type: array
+                  items:
+                    type: object
+      responses:
+        '200':
+          description: Correo enviado.
+
+  # --- Files ---
+  /files/export/xml:
+    get:
+      summary: Exporta todas las reservas a un archivo XML
+      tags: [Files]
+      responses:
+        '200':
+          description: Devuelve un archivo XML para descargar.
+          
+  /files/import/xml:
+    post:
+      summary: Importa reservas desde un archivo XML
+      tags: [Files]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                reservationsFile:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Devuelve un resumen de la carga (éxitos y fallos).
+          
+  # --- Reports ---
+  /reports/summary:
+    get:
+      summary: Obtiene un resumen de estadísticas del sistema
+      tags: [Reports]
+      responses:
+        '200':
+          description: Devuelve un objeto JSON con todas las métricas.
+
+# --- Definiciones de Esquemas (Modelos de Datos) ---
+components:
+  schemas:
+    AuthInput:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "usuario@gmail.com"
+        password:
+          type: string
+          example: "password123"
+          
+    NewReservation:
+      type: object
+      properties:
+        seat_id:
+          type: integer
+        full_name:
+          type: string
+        cui:
+          type: string
+        has_baggage:
+          type: boolean
+        is_random_selection:
+          type: boolean
+          
+    CancelInput:
+      type: object
+      properties:
+        seat_code:
+          type: string
+          example: "A1"
+        cui:
+          type: string
+          example: "1234567890101"
+          
+    ModifyInput:
+      type: object
+      properties:
+        current_seat_code:
+          type: string
+          example: "A1"
+        cui:
+          type: string
+          example: "1234567890101"
+        new_seat_id:
+          type: integer
