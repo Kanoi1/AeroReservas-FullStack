@@ -1,0 +1,27 @@
+<div class="plane-container">
+  <h1>Estado Actual del Avión</h1>
+  <div class="legend">
+    <div><div class="seat-example available"></div> Disponible</div>
+    <div><div class="seat-example occupied"></div> Ocupado</div>
+    <div><div class="seat-example business"></div> Clase de Negocios</div>
+    <div><div class="seat-example economy"></div> Clase Económica</div>
+  </div>
+  <div class="plane">
+    <div class="seat-section">
+      <h3>Clase de Negocios</h3>
+      <div class="seat-grid business-grid">
+        <div *ngFor="let seat of businessSeats" class="seat" [ngClass]="{'business': true, 'occupied': seat.is_occupied}">
+          {{ seat.seat_code }}
+        </div>
+      </div>
+    </div>
+    <div class="seat-section">
+      <h3>Clase Económica</h3>
+      <div class="seat-grid economy-grid">
+        <div *ngFor="let seat of economySeats" class="seat" [ngClass]="{'economy': true, 'occupied': seat.is_occupied}">
+          {{ seat.seat_code }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,76 @@
+.container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.card {
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  border-radius: 20px;
+
+  /* --- Efecto Glassmorphism --- */
+  background: var(--color-transparente-oscuro);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-transparente-borde);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+  margin-top: 0;
+  border-bottom: 1px solid var(--color-transparente-borde);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  color: var(--color-superficie);
+}
+
+.card p {
+  color: var(--color-superficie);
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+/* Estilos para la sección de carga */
+input[type="file"] {
+  color: var(--color-superficie);
+  margin-bottom: 1rem;
+}
+
+.upload-results {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-transparente-borde);
+  color: var(--color-superficie);
+}
+
+.upload-results h4,
+.upload-results h5 {
+  color: var(--color-superficie);
+}
+
+.upload-results .success strong {
+  color: var(--color-primario);
+}
+
+.upload-results .error strong {
+  color: var(--color-secundario);
+}
+
+.upload-results ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.upload-results li {
+  background-color: var(--color-transparente-oscuro);
+  padding: 0.5rem;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}

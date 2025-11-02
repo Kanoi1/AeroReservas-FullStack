@@ -1,0 +1,84 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(16, 20, 48, 0.7); /* Fondo oscuro translúcido de tu paleta */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* Asegura que esté por encima de todo */
+
+  /* Animación de entrada */
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-card {
+  background: var(--color-fondo); /* Fondo claro de tu tema */
+  color: var(--color-superficie); /* Texto oscuro de tu tema */
+  padding: 2rem;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  border: 1px solid var(--color-transparente-borde);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  /* Animación de entrada */
+  animation: zoomIn 0.2s ease-out;
+}
+
+.modal-card h4 {
+  margin-top: 0;
+  color: var(--color-primario); /* Color cyan */
+  font-size: 1.3rem;
+}
+
+.modal-card p {
+  color: var(--color-superficie); /* Texto oscuro */
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* --- NUEVOS ESTILOS PARA LOS BOTONES --- */
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end; /* Alinea los botones a la derecha */
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+
+
+
+/* Estilo para el botón secundario (Cancelar)
+*/
+.modal-actions .btn-secondary {
+  background-color: var(--color-superficie); /* Fondo oscuro (color de texto) */
+  color: var(--color-fondo); /* Texto claro (color de fondo) */
+  border: 1px solid var(--color-transparente-borde);
+  
+  /* Sobrescribimos los efectos de hover globales si es necesario */
+  transform: none;
+  box-shadow: none;
+}
+
+.modal-actions .btn-secondary:hover {
+  background-color: #555; /* Un hover simple */
+}
+
+/* --- ANIMACIONES --- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

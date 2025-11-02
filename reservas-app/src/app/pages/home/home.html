@@ -1,0 +1,126 @@
+<div *ngIf="isModificationMode">
+  <div class="plane-container">
+    <div class="modification-banner">
+      <p><strong>Modo de Modificación:</strong> Estás cambiando la reserva para el asiento <strong>{{ reservationToModify.seat_code }}</strong>.</p>
+      <p>Por favor, selecciona un nuevo asiento disponible de la misma clase.</p>
+      <button (click)="cancelModificationMode()">Cancelar Modificación</button>
+    </div>
+    <div class="plane">
+      <div class="seat-section" *ngIf="selectedClass === 'business'">
+        <h3>Clase de Negocios</h3>
+        <div class="seat-grid business-grid">
+          <div *ngFor="let seat of businessSeats" class="seat" [ngClass]="{'business': true, 'occupied': seat.is_occupied}" (click)="selectSeat(seat)">{{ seat.seat_code }}</div>
+        </div>
+      </div>
+      <div class="seat-section" *ngIf="selectedClass === 'economy'">
+        <h3>Clase Económica</h3>
+        <div class="seat-grid economy-grid">
+          <div *ngFor="let seat of economySeats" class="seat" [ngClass]="{'economy': true, 'occupied': seat.is_occupied}" (click)="selectSeat(seat)">{{ seat.seat_code }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!isModificationMode">
+
+  <div class="setup-panel" *ngIf="step === 'quantity'">
+    <h2>¡Bienvenido! Comencemos tu reserva.</h2>
+    <form #quantityForm="ngForm" (ngSubmit)="setReservationQuantity(quantityForm)">
+      <label for="seatCount">¿Cuántos asientos deseas reservar?</label>
+      <input type="number" id="seatCount" name="seatCount" [(ngModel)]="seatsToReserve" min="1" required>
+      <button type="submit" [disabled]="quantityForm.invalid">Siguiente</button>
+    </form>
+  </div>
+
+  <div class="setup-panel" *ngIf="step === 'mode'">
+    <h2>¿Cómo deseas seleccionar tus {{ seatsToReserve }} asientos?</h2>
+    <div class="mode-selection">
+      <button (click)="setSelectionMode(false)">Selección Manual</button>
+      <button (click)="setSelectionMode(true)">Selección Aleatoria</button>
+    </div>
+    <button class="btn-back" (click)="step = 'quantity'">Volver</button>
+  </div>
+  
+  <div class="setup-panel" *ngIf="step === 'class'">
+    <h2>¿En qué clase deseas reservar manualmente?</h2>
+    <div class="mode-selection">
+      <button (click)="selectManualClass('business')">Clase de Negocios</button>
+      <button (click)="selectManualClass('economy')">Clase Económica</button>
+    </div>
+    <button class="btn-back" (click)="step = 'mode'">Volver</button>
+  </div>
+
+  <div *ngIf="step === 'selection' || step === 'details'">
+    <div class="progress-header">
+      <h2>
+        <span *ngIf="!isRandomSelection && step === 'selection'">Por favor, selecciona el asiento {{ reservationsMade + 1 }} de {{ seatsToReserve }}</span>
+        <span *ngIf="!isRandomSelection && step === 'details'">Ingresa los datos del pasajero {{ reservationsMade + 1 }} de {{ seatsToReserve }} (Asiento: {{ selectedSeat.seat_code }})</span>
+        <span *ngIf="isRandomSelection && step === 'selection'">¿En qué clase deseas los asientos aleatorios?</span>
+        <span *ngIf="isRandomSelection && step === 'details'">Ingresa los datos del pasajero {{ reservationsMade + 1 }} de {{ seatsToReserve }} (Asiento: {{ randomlySelectedSeats[reservationsMade].seat_code }})</span>
+      </h2>
+    </div>
+
+    <div class="setup-panel" *ngIf="isRandomSelection && step === 'selection'">
+      <div class="mode-selection">
+        <button (click)="selectRandomSeats('business')">Clase de Negocios</button>
+        <button (click)="selectRandomSeats('economy')">Clase Económica</button>
+      </div>
+      <button class="btn-back" (click)="step = 'mode'">Volver</button>
+    </div>
+
+    <div class="plane-container" *ngIf="(step === 'selection' && !isRandomSelection) || (step === 'details' && isRandomSelection)">
+      <div class="legend">
+        <div><div class="seat-example occupied"></div> Ocupado</div>
+        <div><div class="seat-example selected"></div> Seleccionado</div>
+        <div><div class="seat-example randomly-selected"></div> Selección Aleatoria</div>
+        <div><div class="seat-example business"></div> Clase de Negocios</div>
+        <div><div class="seat-example economy"></div> Clase Económica</div>
+      </div>
+      <div class="plane">
+        <div class="seat-section" *ngIf="selectedClass === 'business'">
+          <h3>Clase de Negocios</h3>
+          <div class="seat-grid business-grid">
+            <div *ngFor="let seat of businessSeats" class="seat" [ngClass]="{'business': true, 'occupied': seat.is_occupied, 'selected': seat === selectedSeat, 'randomly-selected': isSeatRandomlySelected(seat)}" (click)="selectSeat(seat)">{{ seat.seat_code }}</div>
+          </div>
+        </div>
+        <div class="seat-section" *ngIf="selectedClass === 'economy'">
+          <h3>Clase Económica</h3>
+          <div class="seat-grid economy-grid">
+            <div *ngFor="let seat of economySeats" class="seat" [ngClass]="{'economy': true, 'occupied': seat.is_occupied, 'selected': seat === selectedSeat, 'randomly-selected': isSeatRandomlySelected(seat)}" (click)="selectSeat(seat)">{{ seat.seat_code }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="actions" *ngIf="step === 'selection' && !isRandomSelection">
+         <button class="btn-confirm" [disabled]="!selectedSeat" (click)="proceedToDetails()">Ingresar Datos Pasajero</button>
+      </div>
+    </div>
+    
+    <div class="reservation-panel" *ngIf="step === 'details'">
+      <h3>Detalles del Pasajero {{ reservationsMade + 1 }}</h3>
+      <div class="seat-details">
+        <span>Asiento: <strong>{{ isRandomSelection ? randomlySelectedSeats[reservationsMade].seat_code : selectedSeat.seat_code }}</strong></span>
+      </div>
+      <form #reservationForm="ngForm" (ngSubmit)="onConfirmReservation(reservationForm)">
+        <div class="input-group">
+          <label for="fullName">Nombre Completo</label>
+          <input type="text" id="fullName" name="fullName" [(ngModel)]="passengerData.full_name" required>
+        </div>
+        <div class="input-group">
+          <label for="cui">CUI (13 dígitos)</label>
+          <input type="text" id="cui" name="cui" [(ngModel)]="passengerData.cui" required>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="hasBaggage" name="hasBaggage" [(ngModel)]="passengerData.has_baggage">
+          <label for="hasBaggage">¿Llevará maleta?</label>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn-cancel" (click)="resetFlow()">Cancelar Todo</button>
+          <button type="button" class="btn-skip" (click)="skipCurrentReservation()">Omitir Pasajero</button>
+          <button type="submit" class="btn-confirm" [disabled]="reservationForm.invalid">Confirmar Pasajero {{ reservationsMade + 1 }}</button>
+        </div>
+      </form>
+    </div>
+    
+  </div>
+</div>

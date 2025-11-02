@@ -1,0 +1,32 @@
+<div class="container">
+  <h1>Reportes del Sistema</h1>
+  <div *ngIf="summary; else loading" class="reports-grid">
+
+    <div class="report-card">
+      <h4>Usuarios y Reservas</h4>
+      <p>Usuarios Creados: <strong>{{ summary.created_users_count }}</strong></p>
+    </div>
+
+    <div class="report-card">
+      <h4>Clase de Negocios</h4>
+      <p>Asientos Ocupados: <strong>{{ summary.business_class_occupied }}</strong></p>
+      <p>Asientos Libres: <strong>{{ summary.business_class_free }}</strong></p>
+    </div>
+
+    <div class="report-card">
+      <h4>Clase Económica</h4>
+      <p>Asientos Ocupados: <strong>{{ summary.economy_class_occupied }}</strong></p>
+      <p>Asientos Libres: <strong>{{ summary.economy_class_free }}</strong></p>
+    </div>
+
+    <div class="report-card">
+      <h4>Actividad de Reservas</h4>
+      <p>Reservas Modificadas: <strong>{{ summary.modified_reservations_count }}</strong></p>
+      <p>Reservas Canceladas: <strong>{{ summary.cancelled_reservations_count }}</strong></p>
+    </div>
+
+  </div>
+  <ng-template #loading>
+    <p>Cargando reportes...</p>
+  </ng-template>
+</div>

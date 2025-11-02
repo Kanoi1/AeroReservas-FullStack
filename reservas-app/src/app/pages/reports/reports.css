@@ -1,0 +1,61 @@
+.container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.reports-grid {
+  display: grid;
+  /* Crea columnas flexibles que se adaptan al espacio */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.report-card {
+  padding: 1.5rem;
+  border-radius: 20px;
+
+  /* --- Efecto Glassmorphism --- */
+  background: var(--color-transparente-oscuro);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-transparente-borde);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+.report-card h4 {
+  margin-top: 0;
+  border-bottom: 1px solid var(--color-transparente-borde);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  color: var(--color-superficie);
+  opacity: 0.8;
+}
+
+.report-card p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: var(--color-superficie);
+}
+
+.report-card strong {
+  font-size: 1.5rem;
+  color: var(--color-primario); /* Resaltamos el número con el color primario */
+  margin-right: 0.5rem;
+}
+
+/* --- Media Query para Móviles --- */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .reports-grid {
+    /* Cambia a una sola columna en pantallas pequeñas */
+    grid-template-columns: 1fr;
+  }
+}

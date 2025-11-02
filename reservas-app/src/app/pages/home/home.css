@@ -1,0 +1,155 @@
+.plane-container {
+  padding: 2rem;
+}
+
+h1, h2, h3 {
+  text-align: center;
+}
+
+.plane {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.seat-section, .setup-panel, .reservation-panel {
+  width: 100%;
+  max-width: 800px;
+  padding: 1.5rem;
+  border-radius: 20px;
+  background: var(--color-transparente-oscuro);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-transparente-borde);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.setup-panel {
+  max-width: 600px;
+  margin-top: 4rem;
+}
+
+.mode-selection {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.progress-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.seat-grid {
+  display: grid;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.business-grid { grid-template-columns: repeat(2, 50px); }
+.economy-grid { grid-template-columns: repeat(5, 40px); }
+
+.seat {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 7px;
+  font-weight: bold;
+  color: var(--color-fondo);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+.seat.business {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  background-color: var(--color-primario);
+  color: var(--color-superficie);
+}
+
+.seat.economy {
+  width: 40px;
+  background-color: rgba(16, 20, 48, 0.5);
+  color: var(--color-fondo);
+}
+
+.seat.occupied {
+  background-color: var(--color-secundario);
+  color: var(--color-fondo);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.seat.selected {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px var(--color-primario);
+  border-color: var(--color-primario);
+}
+
+.seat.randomly-selected {
+  background-color: #ffc107; /* Amarillo para resaltar selección aleatoria */
+  color: var(--color-superficie);
+  border-color: #ffc107;
+}
+
+/* --- (Estilos del panel de reserva y leyenda) --- */
+.reservation-panel { max-width: 500px; margin-top: 2rem; }
+.seat-details { display: flex; justify-content: space-around; margin: 1rem 0; padding-bottom: 1rem; border-bottom: 1px solid var(--color-transparente-borde); }
+.seat-details span { font-size: 1.1rem; }
+.actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem; }
+.btn-cancel { background-color: #555; }
+
+.input-group label { color: var(--color-superficie); opacity: 0.8; }
+.input-group input, .setup-panel input {
+  background: rgba(16, 20, 48, 0.2);
+  border: 1px solid var(--color-transparente-borde);
+  color: var(--color-superficie);
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+.checkbox-group { display: flex; align-items: center; gap: 0.5rem; color: var(--color-superficie); }
+
+.legend { display: flex; justify-content: center; gap: 20px; margin-bottom: 1rem; flex-wrap: wrap; }
+.legend div { display: flex; align-items: center; gap: 8px; }
+.seat-example { width: 20px; height: 20px; border-radius: 3px; border: 1px solid var(--color-superficie); }
+.seat-example.occupied { background-color: var(--color-secundario); }
+.seat-example.business { background-color: var(--color-primario); }
+.seat-example.economy { background-color: rgba(16, 20, 48, 0.5); }
+
+/* --- Media Query para Móviles --- */
+@media (max-width: 768px) {
+  .plane-container, .content { padding: 1rem; }
+  .seat-grid { gap: 8px; }
+  .business-grid { grid-template-columns: repeat(2, 40px); }
+  .economy-grid { grid-template-columns: repeat(5, 32px); }
+  .seat { height: 32px; line-height: 32px; font-size: 0.7rem; border-radius: 5px; }
+  .seat.business { width: 40px; height: 40px; line-height: 40px; }
+  .seat.economy { width: 32px; }
+}
+
+.modification-banner {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.modification-banner button {
+  background: none;
+  border: 1px solid #856404;
+  color: #856404;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}

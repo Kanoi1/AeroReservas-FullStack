@@ -1,0 +1,33 @@
+<div class="container">
+  <h1>Gestión de Datos XML</h1>
+
+  <div class="card">
+    <h2>Exportar Reservas</h2>
+    <p>Descarga un archivo XML con todas las reservas confirmadas en el sistema.</p>
+    <button (click)="downloadReservations()">Descargar XML</button>
+  </div>
+
+  <div class="card">
+    <h2>Importar Reservas</h2>
+    <p>Selecciona un archivo XML para cargar reservas de forma masiva.</p>
+    <input type="file" (change)="onFileSelected($event)" accept=".xml">
+    <button (click)="uploadFile()" [disabled]="!selectedFile || isUploading">
+      {{ isUploading ? 'Cargando...' : 'Cargar Archivo' }}
+    </button>
+
+    <div *ngIf="uploadResult" class="upload-results">
+      <h4>Resultados de la Carga:</h4>
+      <p>Procesamiento finalizado en: <strong>{{ uploadResult.processing_time_ms }} ms</strong></p>
+      <p class="success">Cargas exitosas: <strong>{{ uploadResult.successful_loads }}</strong></p>
+      <p class="error">Cargas fallidas: <strong>{{ uploadResult.failed_loads }}</strong></p>
+      <div *ngIf="uploadResult.errors.length > 0">
+        <h5>Detalles de Errores:</h5>
+        <ul>
+          <li *ngFor="let err of uploadResult.errors">
+            Asiento <strong>{{ err.seat }}</strong> (CUI: {{ err.cui }}) - Motivo: {{ err.reason }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

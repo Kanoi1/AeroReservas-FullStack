@@ -1,0 +1,41 @@
+<div class="container">
+  <h1>Mis Reservas</h1>
+
+  <div class="table-container">
+    <div *ngIf="reservations.length > 0; else noReservations">
+      <table>
+        <thead>
+          <tr>
+            <th>Asiento</th>
+            <th>Pasajero</th>
+            <th>CUI</th>
+            <th>Fecha de Reserva</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of reservations">
+            <td data-label="Asiento">{{ r.seat_code }}</td>
+            <td data-label="Pasajero">{{ r.full_name }}</td>
+            <td data-label="CUI">{{ r.cui }}</td>
+            <td data-label="Fecha">{{ r.created_at | date:'short' }}</td>
+            <td data-label="Estado">
+              <span class="status" [ngClass]="r.status">{{ r.status }}</span>
+            </td>
+            <td data-label="Acciones">
+              <div *ngIf="r.status === 'confirmed'" class="action-buttons">
+                <button class="btn-modify" (click)="modifyReservation(r)">Modificar</button>
+                <button class="btn-cancel" (click)="cancelReservation(r)">Cancelar</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noReservations>
+      <p class="no-reservations">Aún no has realizado ninguna reserva.</p>
+    </ng-template>
+  </div>
+
+</div>

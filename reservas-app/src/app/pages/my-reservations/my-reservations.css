@@ -1,0 +1,123 @@
+.container {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Contenedor principal con efecto de vidrio */
+.table-container {
+  border-radius: 20px;
+  padding: 1.5rem;
+  overflow: hidden; /* Necesario para que los bordes redondeados se apliquen a la tabla */
+
+  /* --- Efecto Glassmorphism --- */
+  background: var(--color-transparente-oscuro);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-transparente-borde);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--color-superficie); /* Color de texto oscuro */
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-transparente-borde);
+}
+
+thead th {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+tbody tr {
+  transition: background-color 0.2s;
+}
+
+tbody tr:hover {
+  background-color: var(--color-transparente-oscuro);
+}
+
+.status {
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.status.confirmed {
+  background-color: var(--color-primario);
+  color: var(--color-fondo);
+}
+
+.status.cancelled {
+  background-color: var(--color-secundario);
+  color: var(--color-fondo);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-buttons button {
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  border-radius: 8px;
+}
+
+.btn-modify { background-color: #ffc107; color: var(--color-fondo); }
+.btn-cancel { background-color: #555; color: var(--color-fondo); }
+
+.no-reservations {
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* --- Media Query para Móviles --- */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  /* Oculta la cabecera de la tabla y prepara para diseño de tarjetas */
+  thead {
+    display: none;
+  }
+  tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid var(--color-transparente-borde);
+    border-radius: 10px;
+  }
+  td {
+    display: block;
+    text-align: right; /* Alinea el contenido a la derecha */
+    border-bottom: 1px dotted var(--color-transparente-borde);
+  }
+  td::before {
+    content: attr(data-label); /* Usa el data-label como título de la celda */
+    float: left; /* Alinea el título a la izquierda */
+    font-weight: bold;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+  td:last-child {
+    border-bottom: none;
+  }
+  .action-buttons {
+    justify-content: flex-end;
+  }
+}

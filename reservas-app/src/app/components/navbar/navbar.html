@@ -1,0 +1,24 @@
+<nav class="sidebar" *ngIf="currentUser$ | async as user">
+  <div class="sidebar-header">
+    <h2 class="logo">AR</h2>
+  </div>
+
+  <div class="user-profile">
+    <div class="user-email">{{ user.email }}</div>
+    <div *ngIf="user.reservation_count > 5" class="vip-badge">
+      ⭐ Usuario VIP
+    </div>
+  </div>
+
+  <ul class="nav-links">
+    <li><a routerLink="/home" routerLinkActive="active">Reservar Asientos</a></li>
+    <li><a routerLink="/seat-map" routerLinkActive="active">Ver Avión</a></li>
+    <li><a routerLink="/my-reservations" routerLinkActive="active">Mis Reservas</a></li>
+    <li><a routerLink="/reports" routerLinkActive="active">Reportes</a></li>
+    <li><a routerLink="/data-management" routerLinkActive="active">Gestión de Datos</a></li>
+  </ul>
+
+  <div class="sidebar-footer">
+    <button class="logout-button" (click)="logout()">Cerrar Sesión</button>
+  </div>
+</nav>
